@@ -1,13 +1,14 @@
 # Ethereum ETL PostgreSQL
 
-To export Ethereum data to CSV files:
+### Export Ethereum data from BigQuery to CSV files
 
-- Install gcloud
-- Run `gcloud auth login`
+- Install gcloud and run `gcloud auth login`
 - Run `pip install -r requirements.txt`
-- Run `ethereum_export_bigquery_to_gcs.sh <your_gcs_bucket>`
+- Run `export_ethereum_data_bigquery_to_gcs.sh <your_gcs_bucket>`
 
-TODO:
+### Import data from CSV files to Cloud SQL
+
+TODO: 
 
 Postgres config:
 
