@@ -1,5 +1,3 @@
-# Ethereum ETL PostgreSQL
-
 To export Ethereum data to CSV files:
 
 ```bash

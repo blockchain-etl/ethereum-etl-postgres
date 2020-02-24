@@ -1,0 +1,1 @@
+alter table transactions add constraint transactions_pk primary key (hash);
