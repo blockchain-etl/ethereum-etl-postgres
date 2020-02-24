@@ -17,3 +17,7 @@ temp_file_limit: 2147483647
 Add Cloud SQL service account to the bucket.
 
 Create database.
+
+Install Cloud SQL Proxy: https://cloud.google.com/sql/docs/mysql/sql-proxy#install.
+
+`./cloud_sql_proxy -instances=project:us-central1:ethereum-1=tcp:5432`

@@ -1,4 +1,4 @@
-create table logs
+create table blocks
 (
     timestamp timestamp,
     number bigint,
