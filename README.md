@@ -2,9 +2,10 @@
 
 To export Ethereum data to CSV files:
 
-```bash
-ethereum_export_bigquery_to_gcs.sh <your_gcs_bucket>
-```
+- Install gcloud
+- Run `gcloud auth login`
+- Run `pip install -r requirements.txt`
+- Run `ethereum_export_bigquery_to_gcs.sh <your_gcs_bucket>`
 
 TODO:
 
