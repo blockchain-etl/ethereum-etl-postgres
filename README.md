@@ -21,3 +21,7 @@ Create database.
 Install Cloud SQL Proxy: https://cloud.google.com/sql/docs/mysql/sql-proxy#install.
 
 `./cloud_sql_proxy -instances=project:us-central1:ethereum-1=tcp:5432`
+
+`psql -U postgres -d ethereum -h 127.0.0.1  --port 5432 -a -f indexes.sql`
+
+`SELECT * FROM pg_stat_activity`
