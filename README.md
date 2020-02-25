@@ -4,24 +4,59 @@
 
 - Install gcloud and run `gcloud auth login`
 - Run `pip install -r requirements.txt`
-- Run `export_ethereum_data_bigquery_to_gcs.sh <your_gcs_bucket>`
+- Run `ethereum_bigquery_to_gcs.sh $BUCKET`
+
+Exporting to CSV is going to take about 10 minutes.
 
 ### Import data from CSV files to Cloud SQL
 
-TODO: 
+- Create a new Cloud SQL instance 
 
-Postgres config:
+```bash
+export CLOUD_SQL_INSTANCE_ID=ethereum-0
+gcloud sql instances create $CLOUD_SQL_INSTANCE_ID --database-version=POSTGRES_11 --root-password=<your_password> \
+    --storage-type=SSD --storage-size=100 --cpu=4 --memory=6 \
+    --database-flags=temp_file_limit=2147483647
+```
 
-temp_file_limit: 2147483647
+- Add Cloud SQL service account to GCS bucket as `objectViewer`:
 
-Add Cloud SQL service account to the bucket.
+```bash
+gcloud sql instances describe $CLOUD_SQL_INSTANCE_ID
+```
 
-Create database.
+Copy serviceAccountEmailAddress from the output and add to the bucket
 
-Install Cloud SQL Proxy: https://cloud.google.com/sql/docs/mysql/sql-proxy#install.
+- Create database and tables:
 
-`./cloud_sql_proxy -instances=project:us-central1:ethereum-1=tcp:5432`
+```bash
+gcloud sql databases create ethereum --instance=$CLOUD_SQL_INSTANCE_ID
 
-`psql -U postgres -d ethereum -h 127.0.0.1  --port 5432 -a -f indexes.sql`
+# Install Cloud SQL Proxy following the instrucitons here https://cloud.google.com/sql/docs/mysql/sql-proxy#install
+./cloud_sql_proxy -instances=myProject:us-central1:${CLOUD_SQL_INSTANCE_ID}=tcp:5432
 
-`SELECT * FROM pg_stat_activity`
+cat schema/*.sql | psql -U postgres -d ethereum -h 127.0.0.1  --port 5433 -a
+```
+
+- Run import from GCS to Cloud SQL:
+
+```bash
+bash ethereum_gcs_to_cloud_sql.sh $BUCKET $CLOUD_SQL_INSTANCE_ID
+```
+
+Importing to Cloud SQL is going to take between 12 and 24 hours.
+
+### Apply indexes to the tables
+
+- Run:
+
+```bash
+cat indexes/*.sql | psql -U postgres -d ethereum -h 127.0.0.1  --port 5433 -a
+```
+
+Creating indexes is going to take between 12 and 24 hours. Depending on the queries you're going to run
+you may need to create more indexes or partition the tables.
+
+Cloud SQL instance will cost you between $200 and $500 per month depending on 
+whether you use HDD or SSD and machine type. 
+

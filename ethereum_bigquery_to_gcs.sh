@@ -26,7 +26,7 @@ for table in "${tables[@]}"
 do
     echo "Exporting BigQuery table ${table}"
     output_folder=${table}
-    bash export_bigquery_to_gcs.sh ${table} ${output_bucket} ${output_folder}
+    bash bigquery_to_gcs.sh ${table} ${output_bucket} ${output_folder}
 done
 
 # Rename output folder for flattened logs

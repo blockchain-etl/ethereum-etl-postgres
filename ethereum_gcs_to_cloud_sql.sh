@@ -22,5 +22,5 @@ do
     folder="bigquery-public-data:crypto_ethereum.${table}"
     uri="gs://${input_bucket}/${folder}"
     echo "Importing files from ${uri}"
-    bash import_gcs_to_cloud_sql.sh ${uri} ${cloud_sql_instance_id} ${table}
+    bash gcs_to_cloud_sql.sh ${uri} ${cloud_sql_instance_id} ${table}
 done
