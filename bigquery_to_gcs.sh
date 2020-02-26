@@ -2,7 +2,7 @@
 
 usage() { echo "Usage: $0 <input_table> <output_bucket> [<folder>]" 1>&2; exit 1; }
 
-# Reading input params
+# Read input params
 
 input_table=$1
 output_bucket=$2

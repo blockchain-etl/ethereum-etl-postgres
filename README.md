@@ -1,14 +1,14 @@
-# Ethereum ETL PostgreSQL
+# Ethereum ETL for PostgreSQL
 
-### Export Ethereum data from BigQuery to CSV files
+### Export Ethereum data from BigQuery to CSV files in GCS
 
 - Install gcloud and run `gcloud auth login`
 - Run `pip install -r requirements.txt`
 - Run `ethereum_bigquery_to_gcs.sh $BUCKET`
 
-Exporting to CSV is going to take about 10 minutes.
+Exporting to CSV files is going to take about 10 minutes.
 
-### Import data from CSV files to Cloud SQL
+### Import data from CSV files to PostgreSQL database in Cloud SQL
 
 - Create a new Cloud SQL instance 
 
@@ -18,6 +18,8 @@ gcloud sql instances create $CLOUD_SQL_INSTANCE_ID --database-version=POSTGRES_1
     --storage-type=SSD --storage-size=100 --cpu=4 --memory=6 \
     --database-flags=temp_file_limit=2147483647
 ```
+
+Notice the storage size is set to 100GB. It will scale up automatically when we load in the data.
 
 - Add Cloud SQL service account to GCS bucket as `objectViewer`:
 
@@ -58,5 +60,5 @@ Creating indexes is going to take between 12 and 24 hours. Depending on the quer
 you may need to create more indexes or partition the tables.
 
 Cloud SQL instance will cost you between $200 and $500 per month depending on 
-whether you use HDD or SSD and machine type. 
+whether you use HDD or SSD and on the machine type. 
 
