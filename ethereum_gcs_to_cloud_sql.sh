@@ -10,8 +10,8 @@ if [ -z "${input_bucket}" ] || [ -z "${cloud_sql_instance_id}" ]; then
 fi
 
 declare -a tables=(
-#    "blocks"
-#    "transactions"
+    "blocks"
+    "transactions"
     "token_transfers"
     "traces"
     "logs"

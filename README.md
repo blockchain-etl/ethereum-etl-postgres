@@ -4,7 +4,9 @@
 
 - Install gcloud and run `gcloud auth login`
 - Run `pip install -r requirements.txt`
-- Run `ethereum_bigquery_to_gcs.sh $BUCKET`
+- Run `bash ethereum_bigquery_to_gcs.sh $BUCKET`
+
+Optionally provide start and end dates: `bash ethereum_bigquery_to_gcs.sh $BUCKET 2020-01-01 2020-01-31`
 
 Exporting to CSV files is going to take about 10 minutes.
 
@@ -14,12 +16,13 @@ Exporting to CSV files is going to take about 10 minutes.
 
 ```bash
 export CLOUD_SQL_INSTANCE_ID=ethereum-0
-gcloud sql instances create $CLOUD_SQL_INSTANCE_ID --database-version=POSTGRES_11 --root-password=<your_password> \
+export ROOT_PASSWORD=<your_password>
+gcloud sql instances create $CLOUD_SQL_INSTANCE_ID --database-version=POSTGRES_11 --root-password=$ROOT_PASSWORD \
     --storage-type=SSD --storage-size=100 --cpu=4 --memory=6 \
     --database-flags=temp_file_limit=2147483647
 ```
 
-Notice the storage size is set to 100GB. It will scale up automatically when we load in the data.
+Notice the storage size is set to 100 GB. It will scale up automatically to around 1.5 TB when we load in the data.
 
 - Add Cloud SQL service account to GCS bucket as `objectViewer`:
 
@@ -35,7 +38,7 @@ Copy serviceAccountEmailAddress from the output and add to the bucket
 gcloud sql databases create ethereum --instance=$CLOUD_SQL_INSTANCE_ID
 
 # Install Cloud SQL Proxy following the instrucitons here https://cloud.google.com/sql/docs/mysql/sql-proxy#install
-./cloud_sql_proxy -instances=myProject:us-central1:${CLOUD_SQL_INSTANCE_ID}=tcp:5432
+./cloud_sql_proxy -instances=myProject:us-central1:${CLOUD_SQL_INSTANCE_ID}=tcp:5433
 
 cat schema/*.sql | psql -U postgres -d ethereum -h 127.0.0.1  --port 5433 -a
 ```
@@ -57,7 +60,7 @@ cat indexes/*.sql | psql -U postgres -d ethereum -h 127.0.0.1  --port 5433 -a
 ```
 
 Creating indexes is going to take between 12 and 24 hours. Depending on the queries you're going to run
-you may need to create more indexes or partition the tables.
+you may need to create more indexes or [partition](https://www.postgresql.org/docs/11/ddl-partitioning.html) the tables.
 
 Cloud SQL instance will cost you between $200 and $500 per month depending on 
 whether you use HDD or SSD and on the machine type. 

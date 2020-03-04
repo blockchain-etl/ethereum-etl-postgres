@@ -26,9 +26,9 @@ echo "Extracting ${input_table} to ${output_uri} ..."
 bq extract --noprint_header --destination_format=CSV --compression=GZIP ${input_table} ${output_uri}
 
 # BigQuery exports partitioned tables to many small files. We combine them to bigger files to import faster.
-python ethereumetl_postgresql/gcs_compose.py -b ${output_bucket} -i "${output_folder_raw}/" -o "${output_folder_composed}/"
+python ethereumetl_postgres/gcs_compose.py -b ${output_bucket} -i "${output_folder_raw}/" -o "${output_folder_composed}/"
 # gcloud compose has limit of 32 files in one compose operation. Try composing once more to work around this limit.
-python ethereumetl_postgresql/gcs_compose.py -b ${output_bucket} -i "${output_folder_composed}/" -o "${output_folder}/"
+python ethereumetl_postgres/gcs_compose.py -b ${output_bucket} -i "${output_folder_composed}/" -o "${output_folder}/"
 
 # Cleanup
 
