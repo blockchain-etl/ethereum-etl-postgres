@@ -3,8 +3,12 @@
 ### Export Ethereum data from BigQuery to CSV files in GCS
 
 - Install gcloud and run `gcloud auth login`
-- Run `pip install -r requirements.txt`
-- Run `bash ethereum_bigquery_to_gcs.sh $BUCKET`
+- Run 
+```bash
+pip install -r requirements.txt
+export BUCKET=<your_gcs_bucket>
+bash ethereum_bigquery_to_gcs.sh $BUCKET
+```
 
 Optionally provide start and end dates: `bash ethereum_bigquery_to_gcs.sh $BUCKET 2020-01-01 2020-01-31`
 
@@ -24,15 +28,11 @@ gcloud sql instances create $CLOUD_SQL_INSTANCE_ID --database-version=POSTGRES_1
 
 Notice the storage size is set to 100 GB. It will scale up automatically to around 1.5 TB when we load in the data.
 
-- Add Cloud SQL service account to GCS bucket as `objectViewer`:
+- Add Cloud SQL service account to GCS bucket as `objectViewer`. 
+Run `gcloud sql instances describe $CLOUD_SQL_INSTANCE_ID`, 
+then copy `serviceAccountEmailAddress` from the output and add it to the bucket.
 
-```bash
-gcloud sql instances describe $CLOUD_SQL_INSTANCE_ID
-```
-
-Copy serviceAccountEmailAddress from the output and add to the bucket
-
-- Create database and tables:
+- Create the database and the tables:
 
 ```bash
 gcloud sql databases create ethereum --instance=$CLOUD_SQL_INSTANCE_ID
