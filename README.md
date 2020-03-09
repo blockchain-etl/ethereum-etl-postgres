@@ -51,6 +51,12 @@ bash ethereum_gcs_to_cloud_sql.sh $BUCKET $CLOUD_SQL_INSTANCE_ID
 
 Importing to Cloud SQL is going to take between 12 and 24 hours.
 
+A few performance optimization tips for initial loading of the data:
+
+- Turn off fsync https://www.postgresql.org/docs/11/runtime-config-wal.html.
+- Use UNLOGGED tables.
+- Turn OFF auto backups and vacuum on Google Cloud SQL instance.
+
 ### Apply indexes to the tables
 
 - Run:
