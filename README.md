@@ -1,6 +1,6 @@
 # Ethereum ETL for PostgreSQL
 
-### Export Ethereum data from BigQuery to CSV files in GCS
+### 1. Export Ethereum data from BigQuery to CSV files in GCS
 
 - Install gcloud and run `gcloud auth login`
 - Run 
@@ -14,7 +14,7 @@ Optionally provide start and end dates: `bash ethereum_bigquery_to_gcs.sh $BUCKE
 
 Exporting to CSV files is going to take about 10 minutes.
 
-### Import data from CSV files to PostgreSQL database in Cloud SQL
+### 2. Import data from CSV files to PostgreSQL database in Cloud SQL
 
 - Create a new Cloud SQL instance 
 
@@ -57,7 +57,7 @@ A few performance optimization tips for initial loading of the data:
 - Use UNLOGGED tables.
 - Turn OFF auto backups and vacuum on Google Cloud SQL instance.
 
-### Apply indexes to the tables
+### 3. Apply indexes to the tables
 
 - Run:
 
@@ -71,3 +71,9 @@ you may need to create more indexes or [partition](https://www.postgresql.org/do
 Cloud SQL instance will cost you between $200 and $500 per month depending on 
 whether you use HDD or SSD and on the machine type. 
 
+### 4. Streaming
+
+Use `ethereumetl stream` command to continually pull data from an Ethereum node and insert it to Postgres tables:
+https://github.com/blockchain-etl/ethereum-etl/tree/develop/docs/commands.md#stream.
+
+Follow the instructions here to deploy it to Kubernetes: https://github.com/blockchain-etl/blockchain-etl-streaming.

@@ -18,5 +18,6 @@ create table traces
     status int,
     block_timestamp timestamp,
     block_number bigint,
-    block_hash varchar(66)
+    block_hash varchar(66),
+    trace_id text
 );

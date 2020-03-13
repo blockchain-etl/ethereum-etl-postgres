@@ -1,4 +1,4 @@
--- TODO: add trace_id to traces table to be used a primary key
+alter table traces add constraint traces_pk primary key (trace_id);
 
 create index traces_block_timestamp_index on traces (block_timestamp desc);
 
