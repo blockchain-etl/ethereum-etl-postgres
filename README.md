@@ -1,5 +1,15 @@
 # Ethereum ETL for PostgreSQL
 
+The steps below will allow you to bootstrap a PostgreSQL database in GCP with full historical and real-time Ethereum data:
+blocks, transactions, logs, token_transfers, and traces.
+
+The whole process will take between 24 and 72 hours.
+
+**Prerequisites**:
+
+- Python 3.6+
+- gcloud
+
 ### 1. Export Ethereum data from BigQuery to CSV files in GCS
 
 - Install gcloud and run `gcloud auth login`
