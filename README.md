@@ -9,6 +9,8 @@ The whole process will take between 24 and 72 hours.
 
 - Python 3.6+
 - gcloud
+- psql
+- [Cloud SQL Proxy](https://cloud.google.com/sql/docs/mysql/sql-proxy#install)
 
 ### 1. Export Ethereum data from BigQuery to CSV files in GCS
 
@@ -47,7 +49,7 @@ then copy `serviceAccountEmailAddress` from the output and add it to the bucket.
 ```bash
 gcloud sql databases create ethereum --instance=$CLOUD_SQL_INSTANCE_ID
 
-# Install Cloud SQL Proxy following the instrucitons here https://cloud.google.com/sql/docs/mysql/sql-proxy#install
+# Install Cloud SQL Proxy following the instructions here https://cloud.google.com/sql/docs/mysql/sql-proxy#install
 ./cloud_sql_proxy -instances=myProject:us-central1:${CLOUD_SQL_INSTANCE_ID}=tcp:5433
 
 cat schema/*.sql | psql -U postgres -d ethereum -h 127.0.0.1  --port 5433 -a
