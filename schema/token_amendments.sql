@@ -4,5 +4,6 @@ create table token_amendments
     name text,
     symbol text,
     decimals int(11),
-    function_sighashes text[]
+    function_sighashes text[],
+    is_applied boolean DEFAULT false
 );

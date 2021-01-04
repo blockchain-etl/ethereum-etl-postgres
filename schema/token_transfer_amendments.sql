@@ -8,5 +8,6 @@ create table token_transfer_amendments
     log_index bigint,
     block_timestamp timestamp,
     block_number bigint,
-    block_hash varchar(66)
+    block_hash varchar(66),
+    is_applied boolean DEFAULT false
 );
