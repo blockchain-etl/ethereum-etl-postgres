@@ -1,12 +1,11 @@
 create table blocks
 (
-    timestamp timestamp,
-    number bigint,
+    number numeric,
     hash varchar(66),
     parent_hash varchar(66),
     nonce varchar(42),
     sha3_uncles varchar(66),
-    logs_bloom text,
+    logs_bloom varchar(5000),
     transactions_root varchar(66),
     state_root varchar(66),
     receipts_root varchar(66),
@@ -14,9 +13,10 @@ create table blocks
     difficulty numeric(38),
     total_difficulty numeric(38),
     size bigint,
-    extra_data text,
+    extra_data varchar(5000),
     gas_limit bigint,
     gas_used bigint,
+    timestamp timestamp,
     transaction_count bigint
 );
 
@@ -24,7 +24,7 @@ create table contracts
 (
     address varchar(42),
     bytecode text,
-    function_sighashes text[]
+    function_sighashes text
 );
 
 create table logs
@@ -32,7 +32,7 @@ create table logs
     log_index bigint,
     transaction_hash varchar(66),
     transaction_index bigint,
-    address varchar(42),
+    address varchar(100),
     data text,
     topic0 varchar(66),
     topic1 varchar(66),
@@ -48,7 +48,7 @@ create table token_transfers
     token_address varchar(42),
     from_address varchar(42),
     to_address varchar(42),
-    value numeric(78),
+    value numeric(38),
     transaction_hash varchar(66),
     log_index bigint,
     block_timestamp timestamp,
@@ -61,8 +61,8 @@ create table tokens
     address varchar(42),
     name text,
     symbol text,
-    decimals int(11),
-    function_sighashes text[]
+    decimals numeric(11),
+    function_sighashes text
 );
 
 create table traces
