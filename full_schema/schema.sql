@@ -1,6 +1,6 @@
-drop table blocks;
+-- drop table blocks;
 
-drop table contracts;
+-- drop table contracts;
 
 drop table logs;
 
@@ -13,54 +13,50 @@ drop table traces;
 drop table transactions;
 
 -- Done
-create table blocks
-(
-    number numeric,
-    hash varchar(66) not null,
-    parent_hash varchar(66),
-    nonce varchar(42),
-    sha3_uncles varchar(66),
-    logs_bloom varchar(5000),
-    transactions_root varchar(66),
-    state_root varchar(66),
-    receipts_root varchar(66),
-    miner varchar(42),
-    difficulty numeric(38),
-    total_difficulty numeric(38),
-    size bigint,
-    extra_data varchar(5000),
-    gas_limit bigint,
-    gas_used bigint,
-    timestamp numeric,
-    transaction_count bigint
-)
-sortkey("hash");
+-- create table blocks
+-- (
+--     number numeric,
+--     hash varchar(66) not null,
+--     parent_hash varchar(66),
+--     nonce varchar(42),
+--     sha3_uncles varchar(66),
+--     logs_bloom varchar(5000),
+--     transactions_root varchar(66),
+--     state_root varchar(66),
+--     receipts_root varchar(66),
+--     miner varchar(42),
+--     difficulty numeric(38),
+--     total_difficulty numeric(38),
+--     size bigint,
+--     extra_data varchar(5000),
+--     gas_limit bigint,
+--     gas_used bigint,
+--     timestamp numeric,
+--     transaction_count bigint
+-- )
+-- sortkey("hash");
 
 -- Done
-create table contracts
-(
-    address varchar(42),
-    bytecode varchar(max),
-    function_sighashes text,
-    is_erc20 boolean,
-    is_erc721 boolean,
-    block_number numeric
-);
+-- create table contracts
+-- (
+--     address varchar(42),
+--     bytecode varchar(max),
+--     function_sighashes varchar(5000),
+--     is_erc20 boolean,
+--     is_erc721 boolean,
+--     block_number numeric
+-- );
 
 create table logs
 (
     log_index bigint not null,
     transaction_hash varchar(66) not null,
     transaction_index bigint,
-    address varchar(100),
-    data text,
-    topic0 varchar(66),
-    topic1 varchar(66),
-    topic2 varchar(66),
-    topic3 varchar(66),
-    block_timestamp numeric,
+    block_hash varchar(66),
     block_number bigint,
-    block_hash varchar(66)
+    address varchar(100),
+    data varchar(2560),
+    topics varchar(2560)
 )
 sortkey(transaction_hash, log_index);
 
@@ -136,7 +132,7 @@ sortkey(hash);
 
 -- TODO: Solve indexes and PK issues
 
-alter table blocks add constraint blocks_pk primary key (hash);
+-- alter table blocks add constraint blocks_pk primary key (hash);
 
 alter table logs add constraint logs_pk primary key (transaction_hash, log_index);
 
