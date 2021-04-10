@@ -12,10 +12,11 @@ drop table traces;
 
 drop table transactions;
 
+-- Done
 create table blocks
 (
     number numeric,
-    hash varchar(66),
+    hash varchar(66) not null,
     parent_hash varchar(66),
     nonce varchar(42),
     sha3_uncles varchar(66),
@@ -32,19 +33,24 @@ create table blocks
     gas_used bigint,
     timestamp numeric,
     transaction_count bigint
-);
+)
+sortkey("hash");
 
+-- Done
 create table contracts
 (
     address varchar(42),
-    bytecode text,
-    function_sighashes text
+    bytecode varchar(max),
+    function_sighashes text,
+    is_erc20 boolean,
+    is_erc721 boolean,
+    block_number numeric
 );
 
 create table logs
 (
-    log_index bigint,
-    transaction_hash varchar(66),
+    log_index bigint not null,
+    transaction_hash varchar(66) not null,
     transaction_index bigint,
     address varchar(100),
     data text,
@@ -55,7 +61,8 @@ create table logs
     block_timestamp numeric,
     block_number bigint,
     block_hash varchar(66)
-);
+)
+sortkey(transaction_hash, log_index);
 
 create table token_transfers
 (
@@ -63,12 +70,13 @@ create table token_transfers
     from_address varchar(42),
     to_address varchar(42),
     value numeric(38),
-    transaction_hash varchar(66),
-    log_index bigint,
+    transaction_hash varchar(66) not null,
+    log_index bigint not null,
     block_timestamp numeric,
     block_number bigint,
     block_hash varchar(66)
-);
+)
+sortkey(transaction_hash, log_index);
 
 create table tokens
 (
@@ -100,12 +108,13 @@ create table traces
     block_timestamp numeric,
     block_number bigint,
     block_hash varchar(66),
-    trace_id text
-);
+    trace_id text not null
+)
+sortkey(trace_id);
 
 create table transactions
 (
-    hash varchar(66),
+    hash varchar(66) not null,
     nonce bigint,
     transaction_index bigint,
     from_address varchar(42),
@@ -122,40 +131,17 @@ create table transactions
     block_timestamp numeric,
     block_number bigint,
     block_hash varchar(66)
-);
+)
+sortkey(hash);
 
 -- TODO: Solve indexes and PK issues
 
--- alter table blocks add constraint blocks_pk primary key (hash);
+alter table blocks add constraint blocks_pk primary key (hash);
 
--- create index blocks_timestamp_index on blocks (timestamp desc);
+alter table logs add constraint logs_pk primary key (transaction_hash, log_index);
 
--- create unique index blocks_number_uindex on blocks (number desc);
+alter table token_transfers add constraint token_transfers_pk primary key (transaction_hash, log_index);
 
--- alter table logs add constraint logs_pk primary key (transaction_hash, log_index);
+alter table traces add constraint traces_pk primary key (trace_id);
 
--- create index logs_block_timestamp_index on logs (block_timestamp desc);
-
--- create index logs_address_block_timestamp_index on logs (address, block_timestamp desc);
-
--- alter table token_transfers add constraint token_transfers_pk primary key (transaction_hash, log_index);
-
--- create index token_transfers_block_timestamp_index on token_transfers (block_timestamp desc);
-
--- create index token_transfers_token_address_block_timestamp_index on token_transfers (token_address, block_timestamp desc);
--- create index token_transfers_from_address_block_timestamp_index on token_transfers (from_address, block_timestamp desc);
--- create index token_transfers_to_address_block_timestamp_index on token_transfers (to_address, block_timestamp desc);
-
--- alter table traces add constraint traces_pk primary key (trace_id);
-
--- create index traces_block_timestamp_index on traces (block_timestamp desc);
-
--- create index traces_from_address_block_timestamp_index on traces (from_address, block_timestamp desc);
--- create index traces_to_address_block_timestamp_index on traces (to_address, block_timestamp desc);
-
--- alter table transactions add constraint transactions_pk primary key (hash);
-
--- create index transactions_block_timestamp_index on transactions (block_timestamp desc);
-
--- create index transactions_from_address_block_timestamp_index on transactions (from_address, block_timestamp desc);
--- create index transactions_to_address_block_timestamp_index on transactions (to_address, block_timestamp desc);
+alter table transactions add constraint transactions_pk primary key (hash);
