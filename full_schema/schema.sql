@@ -47,18 +47,18 @@ drop table transactions;
 --     block_number numeric
 -- );
 
-create table logs
-(
-    log_index bigint not null,
-    transaction_hash varchar(66) not null,
-    transaction_index bigint,
-    block_hash varchar(66),
-    block_number bigint,
-    address varchar(100),
-    data varchar(2560),
-    topics varchar(2560)
-)
-sortkey(transaction_hash, log_index);
+-- create table logs
+-- (
+--     log_index bigint not null,
+--     transaction_hash varchar(66) not null,
+--     transaction_index bigint,
+--     block_hash varchar(66),
+--     block_number bigint,
+--     address varchar(100),
+--     data varchar(10000),
+--     topics varchar(2560)
+-- )
+-- sortkey(transaction_hash, log_index);
 
 create table token_transfers
 (
@@ -68,9 +68,7 @@ create table token_transfers
     value numeric(38),
     transaction_hash varchar(66) not null,
     log_index bigint not null,
-    block_timestamp numeric,
-    block_number bigint,
-    block_hash varchar(66)
+    block_number bigint
 )
 sortkey(transaction_hash, log_index);
 
@@ -134,7 +132,7 @@ sortkey(hash);
 
 -- alter table blocks add constraint blocks_pk primary key (hash);
 
-alter table logs add constraint logs_pk primary key (transaction_hash, log_index);
+-- alter table logs add constraint logs_pk primary key (transaction_hash, log_index);
 
 alter table token_transfers add constraint token_transfers_pk primary key (transaction_hash, log_index);
 
