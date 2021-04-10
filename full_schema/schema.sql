@@ -47,17 +47,17 @@ drop table transactions;
 --     block_number numeric
 -- );
 
--- create table logs
--- (
---     log_index bigint not null,
---     transaction_hash varchar(66) not null,
---     transaction_index bigint,
---     block_hash varchar(66),
---     block_number bigint,
---     address varchar(100),
---     data varchar(max),
---     topics varchar(2560)
--- )
+create table logs
+(
+    log_index bigint not null,
+    transaction_hash varchar(66) not null,
+    transaction_index bigint,
+    block_hash varchar(66),
+    block_number bigint,
+    address varchar(100),
+    data varchar(max),
+    topics varchar(2560)
+)
 -- sortkey(transaction_hash, log_index);
 
 -- create table token_transfers
@@ -75,10 +75,11 @@ drop table transactions;
 create table tokens
 (
     address varchar(42),
-    name text,
     symbol text,
+    name text,
     decimals numeric(11),
-    function_sighashes text
+    total_supply numeric(38),
+    block_number bigint
 );
 
 create table traces
