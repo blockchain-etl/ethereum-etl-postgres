@@ -21,6 +21,8 @@ services:
   bsc:
     build:
       context: bsc-node
+    volumes:
+      - ./data/node:/app/data
     ports:
       - 8545:8545
     restart: always
