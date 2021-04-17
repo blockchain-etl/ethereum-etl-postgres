@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  etl:
+    build:
+      context: extractor
+    command: stream
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+  bsc:
+    build:
+      context: bsc-node
