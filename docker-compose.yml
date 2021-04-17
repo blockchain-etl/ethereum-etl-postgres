@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 services:
   db:
@@ -20,3 +20,6 @@ services:
   bsc:
     build:
       context: bsc-node
+    ports:
+      - 8545:8545
+    restart: always

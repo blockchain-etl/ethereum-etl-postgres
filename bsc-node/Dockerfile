@@ -7,8 +7,8 @@ RUN apt install git make wget build-essential -y
 RUN wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
 RUN tar -xvf go1.16.3.linux-amd64.tar.gz
 
-RUN git clone https://github.com/binance-chain/bsc
-WORKDIR bsc
+RUN git clone https://github.com/binance-chain/bsc /bsc
+WORKDIR /bsc
 RUN PATH=$PATH:/go/bin make geth
 
 FROM debian:stretch-slim
