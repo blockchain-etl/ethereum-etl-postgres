@@ -12,6 +12,7 @@ RUN chmod +x /usr/bin/geth
 COPY config.toml .
 COPY genesis.json .
 COPY run.sh .
+RUN chmod +x run.sh
 
 # Let it run
 CMD /app/run.sh
