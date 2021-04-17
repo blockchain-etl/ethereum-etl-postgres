@@ -17,6 +17,7 @@ services:
       - .:/code
     depends_on:
       - db
+    restart: always
   bsc:
     build:
       context: bsc-node
