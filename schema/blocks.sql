@@ -17,5 +17,6 @@ create table blocks
     extra_data text,
     gas_limit bigint,
     gas_used bigint,
-    transaction_count bigint
+    transaction_count bigint,
+    base_fee_per_gas bigint
 );

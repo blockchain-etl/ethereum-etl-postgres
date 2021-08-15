@@ -16,5 +16,9 @@ create table transactions
     receipt_status bigint,
     block_timestamp timestamp,
     block_number bigint,
-    block_hash varchar(66)
+    block_hash varchar(66),
+    max_fee_per_gas bigint,
+    max_priority_fee_per_gas bigint,
+    transaction_type bigint,
+    receipt_effective_gas_price bigint
 );
