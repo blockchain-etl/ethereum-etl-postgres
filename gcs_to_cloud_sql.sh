@@ -17,6 +17,6 @@ for gcs_file in $(gsutil ls ${input_gcs_uri}); do
     echo "Executing command ${command}"
     operation_url=$(${command})
     operation_id="${operation_url: -36}"
-    gcloud sql operations wait --project crypto-etl-ethereum-dev ${operation_id} --timeout unlimited
+    gcloud sql operations wait ${operation_id} --timeout unlimited
     sleep 10
 done
