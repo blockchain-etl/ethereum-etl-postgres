@@ -15,6 +15,8 @@ declare -a tables=(
     "token_transfers"
     "traces"
     "logs"
+    "contracts"
+    "tokens"
 )
 
 for table in "${tables[@]}"
