@@ -71,6 +71,8 @@ A few performance optimization tips for initial loading of the data:
 
 ### 3. Apply indexes to the tables
 
+NOTE: indexes won't work for the contracts table due to the issue described here https://github.com/blockchain-etl/ethereum-etl-postgres/pull/11#issuecomment-1107801061
+
 - Run:
 
 ```bash
