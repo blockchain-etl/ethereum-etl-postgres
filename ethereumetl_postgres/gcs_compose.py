@@ -17,7 +17,7 @@ args = parser.parse_args()
 
 
 def compose(bucket_name, source_prefix, destination_prefix, max_size_in_bytes):
-    print('Composing files in {} to {}'.format(f'gs://{bucket_name}{source_prefix}', f'gs://{bucket_name}{destination_prefix}'))
+    print('Composing files in {} to {}'.format(f'gs://{bucket_name}/{source_prefix}', f'gs://{bucket_name}/{destination_prefix}'))
     storage_client = storage.Client()
 
     blobs = storage_client.list_blobs(bucket_name, prefix=source_prefix)
