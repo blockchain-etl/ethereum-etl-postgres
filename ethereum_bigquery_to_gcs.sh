@@ -24,8 +24,9 @@ export_temp_contracts_table="flattened_contracts"
 bq rm -r -f ${export_temp_dataset}
 bq mk ${export_temp_dataset}
 
-flatten_crypto_ethereum_logs_sql=$(cat ./flatten_crypto_ethereum_logs.sql | tr '\n' ' ')
-flatten_crypto_ethereum_contracts_sql=$(cat ./flatten_crypto_ethereum_contracts.sql | tr '\n' ' ')
+# Use awk to trim comments in sql files.
+flatten_crypto_ethereum_logs_sql=$(cat ./flatten_crypto_ethereum_logs.sql | awk -F '--' '{print $1}'| tr '\n' ' ')
+flatten_crypto_ethereum_contracts_sql=$(cat ./flatten_crypto_ethereum_contracts.sql | awk -F '--' '{print $1}' |  tr '\n' ' ')
 
 if [ "${filter_date}" = "true" ]; then
     flatten_crypto_ethereum_logs_sql="${flatten_crypto_ethereum_logs_sql} where date(block_timestamp) >= '${start_date}' and date(block_timestamp) <= '${end_date}'"
