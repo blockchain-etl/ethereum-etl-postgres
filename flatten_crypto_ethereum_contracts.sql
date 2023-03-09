@@ -8,5 +8,6 @@ select
     is_erc20,
     is_erc721,
     block_number,
-    block_timestamp
+    block_timestamp,
+    block_hash
 from `bigquery-public-data.crypto_ethereum.contracts`
