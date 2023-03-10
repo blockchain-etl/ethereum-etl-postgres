@@ -58,12 +58,12 @@ do
             timestamp_column="timestamp"
         fi
         query="${query} where date(${timestamp_column}) >= '${start_date}' and date(${timestamp_column}) <= '${end_date}'"
-        fitered_table_name="${table//[.:-]/_}_fitered"
+        filtered_table_name="${table//[.:-]/_}_filtered"
         echo "Executing query ${query}"
-        bq --location=US query --destination_table "${export_temp_dataset}.${fitered_table_name}" --use_legacy_sql=false "${query}"
+        bq --location=US query --destination_table "${export_temp_dataset}.${filtered_table_name}" --use_legacy_sql=false "${query}"
 
-        output_folder=${fitered_table_name}
-        bash bigquery_to_gcs.sh "${export_temp_dataset}.${fitered_table_name}" ${output_bucket} ${output_folder}
+        output_folder=${filtered_table_name}
+        bash bigquery_to_gcs.sh "${export_temp_dataset}.${filtered_table_name}" ${output_bucket} ${output_folder}
         gsutil -m mv gs://${output_bucket}/${output_folder}/* gs://${output_bucket}/${table}/
     else
         output_folder=${table}
