@@ -17,7 +17,11 @@ fi
 
 # The logs and contracts tables contain columns with type ARRAY<STRING>. 
 # BigQuery can't export it to CSV so we need to flatten it.
-export_temp_dataset="export_temp_dataset"
+if [ "${filter_date}" = "true" ]; then
+  export_temp_dataset="export_temp_dataset_${start_date}_to_${end_date}"
+else
+  export_temp_dataset="export_temp_dataset"
+fi
 export_temp_logs_table="flattened_logs"
 export_temp_contracts_table="flattened_contracts"
 
@@ -59,10 +63,11 @@ do
         fi
         query="${query} where date(${timestamp_column}) >= '${start_date}' and date(${timestamp_column}) <= '${end_date}'"
         fitered_table_name="${table//[.:-]/_}_fitered"
-        echo "Executing query ${query}"
+        echo "Executing query ${query} and saving it in our BigQuery instance"
         bq --location=US query --destination_table "${export_temp_dataset}.${fitered_table_name}" --use_legacy_sql=false "${query}"
 
         output_folder=${fitered_table_name}
+        echo "Moving data from our BigQuery instance to Google Cloud Storage"
         bash bigquery_to_gcs.sh "${export_temp_dataset}.${fitered_table_name}" ${output_bucket} ${output_folder}
         gsutil -m mv gs://${output_bucket}/${output_folder}/* gs://${output_bucket}/${table}/
     else
