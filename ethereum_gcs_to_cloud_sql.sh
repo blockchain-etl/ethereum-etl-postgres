@@ -11,19 +11,19 @@ fi
 
 declare -a tables=(
     "blocks"
-    # "transactions"
-    # "token_transfers"
-    # "traces"
-    # "logs"
-    # "contracts"
-    # "tokens"
+    "transactions"
+    "token_transfers"
+    "traces"
+    "logs"
+    "contracts"
+    "tokens"
 )
 
 for table in "${tables[@]}"
 do
     folder="bigquery-public-data:crypto_ethereum.${table}"
     uri="gs://${input_bucket}/${folder}"
-    # I tried creating a mapping for 1 hour and couldn't do it so just gonna resort to if else
+    # Wayland: I tried creating a mapping for 1 hour and couldn't do it so just gonna resort to if else
     if [ "$table" == "blocks" ]; then
         table_type="block"
     elif [ "$table" == "transactions" ]; then
@@ -44,5 +44,5 @@ do
     fi
     
     echo "Importing files from ${uri} to ${cloud_sql_instance_id} $table_type"
-    sh gcs_to_cloud_sql.sh ${uri} ${cloud_sql_instance_id} $table_type
+    sh gcs_to_cloud_sql.sh ${uri} ${cloud_sql_instance_id} ${table_type}
 done

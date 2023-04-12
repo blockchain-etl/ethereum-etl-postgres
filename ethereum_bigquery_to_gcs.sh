@@ -44,12 +44,12 @@ bq --location=US query --destination_table ${export_temp_dataset}.${export_temp_
 
 declare -a tables=(
     "bigquery-public-data:crypto_ethereum.blocks"
-    # "bigquery-public-data:crypto_ethereum.transactions"
-    # "bigquery-public-data:crypto_ethereum.token_transfers"
-    # "bigquery-public-data:crypto_ethereum.traces"
-    # "bigquery-public-data:crypto_ethereum.tokens"
-    # "${export_temp_dataset}.${export_temp_log_table}"
-    # "${export_temp_dataset}.${export_temp_contract_table}"
+    "bigquery-public-data:crypto_ethereum.transactions"
+    "bigquery-public-data:crypto_ethereum.token_transfers"
+    "bigquery-public-data:crypto_ethereum.traces"
+    "bigquery-public-data:crypto_ethereum.tokens"
+    "${export_temp_dataset}.${export_temp_log_table}"
+    "${export_temp_dataset}.${export_temp_contract_table}"
 )
 
 for table in "${tables[@]}"
@@ -62,8 +62,8 @@ do
             timestamp_column="timestamp"
             # temp fix b/c bigquery added a nested column called withdrawals
             # in the future we should only query for data that we are storing, while staying on top of any new columns that are added
-            # block_columns="timestamp"
-            # query="select ${block_columns} from \`${table//:/.}\`"
+            block_columns="timestamp,number,h.hash,parent_hash,nonce,sha3_uncles,logs_bloom,transactions_root,state_root,receipts_root,miner,difficulty,total_difficulty,size,extra_data,gas_limit,gas_used,transaction_count,base_fee_per_gas"
+            query="select ${block_columns} from \`${table//:/.}\` h"
         fi
         query="${query} where date(${timestamp_column}) >= '${start_date}' and date(${timestamp_column}) <= '${end_date}'"
         fitered_table_name="${table//[.:-]/_}_fitered"
@@ -85,4 +85,4 @@ gsutil -m mv gs://${output_bucket}/${export_temp_dataset}.${export_temp_log_tabl
 gsutil -m mv gs://${output_bucket}/${export_temp_dataset}.${export_temp_contract_table}/* gs://${output_bucket}/bigquery-public-data:crypto_ethereum.contracts/
 
 # Cleanup
-# bq rm -r -f ${export_temp_dataset}
+bq rm -r -f ${export_temp_dataset}

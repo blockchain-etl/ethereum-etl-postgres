@@ -28,7 +28,7 @@ Exporting to CSV files on GCS is going to take about 10 minutes.
 
 ### 2. Import data from CSV files to PostgreSQL database in Cloud SQL
 
-- Create a new Cloud SQL instance IF we don't have one
+#### 2.1 Create a new Cloud SQL instance IF we don't have one
 ```bash
   gcloud sql instances list # check for binocular-server
 ```
@@ -48,7 +48,7 @@ Notice the storage size is set to 100 GB. It will scale up automatically to arou
 Run `gcloud sql instances describe $CLOUD_SQL_INSTANCE_ID`,
 then copy `serviceAccountEmailAddress` from the output and add it to the bucket.
 
-- Create the database and the tables:
+#### 2.2  Create the database and the tables:
 
 ```bash
 export CLOUD_SQL_INSTANCE_ID=binocular-server
@@ -60,7 +60,7 @@ export CLOUD_SQL_INSTANCE_ID=binocular-server
 cat schema/*.sql | psql -U postgres -d postgres -h 127.0.0.1 -a
 ```
 
-- Run import from GCS to Cloud SQL:
+#### 2.3 Run import from GCS to Cloud SQL:
 
 ```bash
 echo $BUCKET $CLOUD_SQL_INSTANCE_ID
