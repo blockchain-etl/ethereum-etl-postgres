@@ -10,10 +10,10 @@ if [ -z "${input_gcs_uri}" ] || [ -z "${cloud_sql_instance_id}" ] || [ -z "${tab
     usage
 fi
 
-database_name="ethereum"
+database_name="postgres"
 
 for gcs_file in $(gsutil ls ${input_gcs_uri}); do
-    command="gcloud sql import csv ${cloud_sql_instance_id} ${gcs_file} --database=${database_name} --table=${table_name} --quiet --async"
+    command="gcloud sql import csv ${cloud_sql_instance_id} ${gcs_file} --database postgres --table=${table_name} --quiet --async"
     echo "Executing command ${command}"
     operation_url=$(${command})
     operation_id="${operation_url: -36}"

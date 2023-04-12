@@ -18,21 +18,25 @@ The whole process will take between 24 and 72 hours.
 - Run 
 ```bash
 pip install -r requirements.txt
-export BUCKET=<your_gcs_bucket>
-bash ethereum_bigquery_to_gcs.sh $BUCKET
+# bucket link: https://console.cloud.google.com/storage/browser/axel-ethereum_data-csv
+export BUCKET=axel-ethereum_data-csv
+sh ethereum_bigquery_to_gcs.sh $BUCKET 2020-01-01 2020-01-02
 ```
 
-Optionally provide start and end dates: `bash ethereum_bigquery_to_gcs.sh $BUCKET 2020-01-01 2020-01-31`
-
-Exporting to CSV files is going to take about 10 minutes.
+If you want to download everything, ignore the start and end dates: `bash ethereum_bigquery_to_gcs.sh $BUCKET`
+Exporting to CSV files on GCS is going to take about 10 minutes.
 
 ### 2. Import data from CSV files to PostgreSQL database in Cloud SQL
 
-- Create a new Cloud SQL instance 
+- Create a new Cloud SQL instance IF we don't have one
+```bash
+  gcloud sql instances list # check for binocular-server
+```
 
 ```bash
-export CLOUD_SQL_INSTANCE_ID=ethereum-0
-export ROOT_PASSWORD=<your_password>
+# only run this if it doesn't already exist
+export CLOUD_SQL_INSTANCE_ID=binocular-server
+export ROOT_PASSWORD=<your_password> # pull from 1password Cloud SQL DB - Binocular Server
 gcloud sql instances create $CLOUD_SQL_INSTANCE_ID --database-version=POSTGRES_11 --root-password=$ROOT_PASSWORD \
     --storage-type=SSD --storage-size=100 --cpu=4 --memory=6 \
     --database-flags=temp_file_limit=2147483647
@@ -41,24 +45,26 @@ gcloud sql instances create $CLOUD_SQL_INSTANCE_ID --database-version=POSTGRES_1
 Notice the storage size is set to 100 GB. It will scale up automatically to around 1.5 TB when we load in the data.
 
 - Add Cloud SQL service account to GCS bucket as `objectViewer`. 
-Run `gcloud sql instances describe $CLOUD_SQL_INSTANCE_ID`, 
+Run `gcloud sql instances describe $CLOUD_SQL_INSTANCE_ID`,
 then copy `serviceAccountEmailAddress` from the output and add it to the bucket.
 
 - Create the database and the tables:
 
 ```bash
-gcloud sql databases create ethereum --instance=$CLOUD_SQL_INSTANCE_ID
+export CLOUD_SQL_INSTANCE_ID=binocular-server
+# gcloud sql databases create postgres --instance=$CLOUD_SQL_INSTANCE_ID
 
 # Install Cloud SQL Proxy following the instructions here https://cloud.google.com/sql/docs/mysql/sql-proxy#install
-./cloud_sql_proxy -instances=myProject:us-central1:${CLOUD_SQL_INSTANCE_ID}=tcp:5433
+./cloud-sql-proxy regal-skyline-379801:us-central1:${CLOUD_SQL_INSTANCE_ID}
 
-cat schema/*.sql | psql -U postgres -d ethereum -h 127.0.0.1  --port 5433 -a
+cat schema/*.sql | psql -U postgres -d postgres -h 127.0.0.1 -a
 ```
 
 - Run import from GCS to Cloud SQL:
 
 ```bash
-bash ethereum_gcs_to_cloud_sql.sh $BUCKET $CLOUD_SQL_INSTANCE_ID
+echo $BUCKET $CLOUD_SQL_INSTANCE_ID
+sh ethereum_gcs_to_cloud_sql.sh $BUCKET $CLOUD_SQL_INSTANCE_ID
 ```
 
 Importing to Cloud SQL is going to take between 12 and 24 hours.
@@ -76,7 +82,7 @@ NOTE: indexes won't work for the contracts table due to the issue described here
 - Run:
 
 ```bash
-cat indexes/*.sql | psql -U postgres -d ethereum -h 127.0.0.1  --port 5433 -a
+cat indexes/*.sql | psql -U postgres -d postgres -h 127.0.0.1 -a
 ```
 
 Creating indexes is going to take between 12 and 24 hours. Depending on the queries you're going to run
