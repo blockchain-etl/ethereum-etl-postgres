@@ -21,9 +21,8 @@ create table transactions
     max_priority_fee_per_gas bigint,
     transaction_type bigint,
     receipt_effective_gas_price bigint,
-    effective_gas_price bigint,
-    l1_fee bigint,
-    l1_gas_used bigint,
-    l1_gas_price bigint,
-    l1_fee_scalar decimal
+    receipt_l1_fee bigint,
+    receipt_l1_gas_used bigint,
+    receipt_l1_gas_price bigint,
+    receipt_l1_fee_scalar decimal
 );
