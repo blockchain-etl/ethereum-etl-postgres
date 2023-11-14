@@ -7,5 +7,6 @@ create table tokens
     total_supply numeric(78),
     block_number bigint,
     block_hash varchar(66),
-    block_timestamp timestamp
+    block_timestamp timestamp,
+    function_sighashes text[]
 );
