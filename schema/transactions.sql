@@ -24,5 +24,9 @@ create table transactions
     receipt_l1_fee bigint,
     receipt_l1_gas_used bigint,
     receipt_l1_gas_price bigint,
-    receipt_l1_fee_scalar decimal
+    receipt_l1_fee_scalar decimal,
+    max_fee_per_blob_gas bigint,
+    blob_versioned_hashes text,
+    receipt_blob_gas_price bigint,
+    receipt_blob_gas_used bigint
 );

@@ -18,5 +18,8 @@ create table blocks
     gas_limit bigint,
     gas_used bigint,
     transaction_count bigint,
-    base_fee_per_gas bigint
+    base_fee_per_gas bigint,
+    withdrawals_root varchar(66),
+    blob_gas_used bigint,
+    excess_blob_gas bigint
 );
