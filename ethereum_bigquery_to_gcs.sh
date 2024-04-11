@@ -15,7 +15,7 @@ if [ -n "${start_date}" ] && [ -n "${end_date}" ]; then
     filter_date=true
 fi
 
-# The logs and contracts tables contain columns with type ARRAY<STRING>.
+# The tables below contain columns with type ARRAY<...>.
 # BigQuery can't export it to CSV so we need to flatten it.
 export_temp_dataset="export_temp_dataset"
 export_temp_blocks_table="flattened_blocks"
